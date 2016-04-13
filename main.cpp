@@ -34,11 +34,10 @@ int main()
         state = WRITE;
       else
         int t =1;
-        
-      printf("%c %u\n", s, addr);
       LeastRecentlyUsed(lru,state,addr);
       i++;
     }
+
   cout << i<<endl;
   print_stats(lru->stats);
   fclose(fp);

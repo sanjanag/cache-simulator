@@ -16,11 +16,9 @@ using namespace std;
 
 struct statistics
 {
-  int L1_hit;
+  int L_hit;
   int L1_miss;
-  int L2_hit;
   int L2_miss;
-  int L3_hit;
   int L3_miss;
 };
 

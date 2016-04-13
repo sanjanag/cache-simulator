@@ -31,11 +31,9 @@ void init_LRU(LRU_objects * lru)
   create_L(lru->L1, L1_SETS, L1_WAYS);
   create_L(lru->L2, L2_SETS, L2_WAYS);
   create_L(lru->L3,L3_SETS, L3_WAYS);
-  lru->stats.L1_hit = 0;
+  lru->stats.L_hit = 0;
   lru->stats.L1_miss = 0;
-  lru->stats.L2_hit = 0;
   lru->stats.L2_miss = 0;
-  lru->stats.L3_hit = 0;
   lru->stats.L3_miss = 0;
   initL_lruList(lru->L1_lruList, L1_SETS, L1_WAYS);
   initL_lruList(lru->L2_lruList, L2_SETS, L2_WAYS);
@@ -68,15 +66,11 @@ void getKey(unsigned addr, int level, search_key* key)
 int search_cache(cache* L, search_key* key)
 {
   int i;
-  //  cout <<"--"<< L->ways<< endl;
   unsigned index = key->index;
-  //  cout << "++" << key->index << endl;
-  //  cout << key->index;
   unsigned tag = key->tag;
   
   for(i=0;i<L->ways;i++)
     {
-      //      cout << L->set[index].l[i].tag << endl;
       if(L->set[index].l[i].tag == tag && L->set[index].l[i].valid == TRUE)
         return i;
     }
@@ -167,7 +161,7 @@ void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr)
   getKey(addr, 1, key1);
   getKey(addr, 2, key2);
   getKey(addr, 3, key3);
-  
+  cout << key1->index << " " << key1->tag<<endl;
   int pos1, pos2, pos3;
   int result1 = search_cache(lru->L1, key1);
   if(result1 == -1)
@@ -217,7 +211,7 @@ void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr)
             }
           else
             {
-              lru->stats.L3_hit++;
+              lru->stats.L_hit++;
               if(state == WRITE)
                 lru->L3->set[key3->index].l[result3].state = state;
               updateToMRU(result3, lru->L3_lruList,key3);
@@ -226,7 +220,7 @@ void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr)
         }
       else
         {
-          lru->stats.L2_hit++;
+          lru->stats.L_hit++;
           if(state == WRITE)
             lru->L2->set[key2->index].l[result2].state = state;
           updateToMRU(result2, lru->L2_lruList,key2);
@@ -235,7 +229,7 @@ void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr)
     }
   else
     {
-      lru->stats.L1_hit++;
+      lru->stats.L_hit++;
       if(state == WRITE)
         lru->L1->set[key1->index].l[result1].state = state;
       updateToMRU(result1, lru->L1_lruList,key1);
@@ -248,10 +242,9 @@ void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr)
 
 void print_stats(statistics stats)
 {
-  cout << "L1 hits " << stats.L1_hit << endl;
-  cout << "L1 misses " << stats.L2_miss << endl;
-  cout << "L2 hits " << stats.L2_hit << endl;
+  cout << "hits " << stats.L_hit << endl;
+  cout << "L1 misses " << stats.L1_miss << endl;
   cout << "L2 misses " << stats.L2_miss << endl;
-  cout << "L3 hits " << stats.L3_hit << endl;
   cout << "L3 misses " << stats.L3_miss << endl;
 }
+
