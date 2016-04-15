@@ -3,7 +3,7 @@
 #include<vector>
 #include<algorithm>
 #include "func.h"
-
+#include<cstdlib>
 using namespace std;
 
 
@@ -161,7 +161,7 @@ void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr)
   getKey(addr, 1, key1);
   getKey(addr, 2, key2);
   getKey(addr, 3, key3);
-  cout << key1->index << " " << key1->tag<<endl;
+  //  cout << key1->index << " " << key1->tag<<endl;
   int pos1, pos2, pos3;
   int result1 = search_cache(lru->L1, key1);
   if(result1 == -1)
@@ -239,7 +239,6 @@ void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr)
   delete key3;
   
 }
-
 void print_stats(statistics stats)
 {
   cout << "hits " << stats.L_hit << endl;

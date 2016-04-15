@@ -18,33 +18,54 @@ int main()
   unsigned addr;
   int state;
   FILE* fp;
-  fp = fopen("pinatrace.out","r");
-  int i = 0;
-  LRU_objects* lru = new LRU_objects;
-  lru->L1 = new cache;
-  lru->L2 = new cache;
-  lru->L3 = new cache;
-  init_LRU(lru);
-  
-  while((fscanf(fp,"%c %u\n",&s, &addr))!= EOF)
+  fp = fopen("./mem_trace_rw/xalanbmk.diffmail.out3","r");
+  long long int i = 0;
+  LRU_objects* lru1 = new LRU_objects;
+  lru1->L1 = new cache;
+  lru1->L2 = new cache;
+  lru1->L3 = new cache;
+  init_LRU(lru1);
+  LRU_objects* lru2 = new LRU_objects;
+  lru2->L1 = new cache;
+  lru2->L2 = new cache;
+  lru2->L3 = new cache;
+  init_LRU(lru2);
+  LRU_objects* lru3 = new LRU_objects;
+  lru3->L1 = new cache;
+  lru3->L2 = new cache;
+  lru3->L3 = new cache;
+  init_LRU(lru3);
+
+  while((fscanf(fp,"%c%x , ",&s, &addr))!= EOF)
     {
-      if(state == 'R')
+      if(state == 'r')
         state = READ;
-      else if (state == 'W')
+      else if (state == 'w')
         state = WRITE;
-      else
-        int t =1;
-      LeastRecentlyUsed(lru,state,addr);
+      LeastRecentlyUsed(lru1,state,addr);
+      LIP(lru2, state, addr);
+      BimodalLIP(lru3,state,addr);
       i++;
     }
 
   cout << i<<endl;
-  print_stats(lru->stats);
+  print_stats(lru1->stats);
+	print_stats(lru2->stats);
+print_stats(lru3->stats);
   fclose(fp);
-  delete lru->L1;
-  delete lru->L2;
-  delete lru->L3;
-  delete lru;
   
+  delete lru1->L1;
+  delete lru1->L2;
+  delete lru1->L3;
+  delete lru1;
+  delete lru2->L1;
+  delete lru2->L2;
+  delete lru2->L3;
+  delete lru2;
+  delete lru3->L1;
+  delete lru3->L2;
+  delete lru3->L3;
+  delete lru3;
+
   return 0;
 }

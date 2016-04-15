@@ -21,5 +21,8 @@ extern unsigned getAddr(cache* L,unsigned index, int pos);
 extern void updateInNextLevel(cache* L,search_key * key );
 extern void LeastRecentlyUsed(LRU_objects* lru, int state, unsigned addr);
 extern void print_stats(statistics stats);
-
+extern void LIP(LRU_objects* lru, int state, unsigned addr);
+extern void BimodalLIP(LRU_objects* lru, int state, unsigned addr);
+extern int findRandom(cache *L);
+extern void RandomReplace(LRU_objects* lru, int state, unsigned addr);
 #endif
